@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="OnionCartDemo.Application/OnionCartDemo.Application.csproj" />
+  <Project Path="OnionCartDemo.Domain/OnionCartDemo.Domain.csproj" />
+  <Project Path="OnionCartDemo.Infrastructure/OnionCartDemo.Infrastructure.csproj" />
+  <Project Path="OnionCartDemo.WebApi/OnionCartDemo.WebApi.csproj" />
+</Solution>

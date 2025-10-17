@@ -1,0 +1,6 @@
+@OnionCartDemo.WebApi_HostAddress = http://localhost:5122
+
+GET {{OnionCartDemo.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
