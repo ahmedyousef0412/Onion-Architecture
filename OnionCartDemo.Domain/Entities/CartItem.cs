@@ -12,16 +12,15 @@ public class CartItem
     private CartItem() { } // For EF Core
 
 
-    public CartItem(Product product, int quantity)
+    public CartItem(int productId, decimal unitPrice,int quantity)
     {
 
         if (quantity < 1)
             throw new InvalidCartItemQuantityException();
 
-        Product = product;
-        ProductId = product.Id;
+        ProductId = productId;
         Quantity = quantity;
-        UnitPrice = product.UnitPrice;
+        UnitPrice = unitPrice;
     }
     public decimal TotalPrice => UnitPrice * Quantity;  // 100 * 2 = 200
 
