@@ -8,6 +8,7 @@ public class Product
     public string Name { get; private set; } = null!;
     public decimal UnitPrice { get; private set; }
 
+    public bool IsActive { get;  private set; }
     private Product() { } // For EF Core
 
 
@@ -29,4 +30,10 @@ public class Product
             throw new ProductPriceNegativeException();
         UnitPrice = newPrice;
     }
+
+    public void Deactivate()
+    {
+        IsActive = false;
+    }
+
 }

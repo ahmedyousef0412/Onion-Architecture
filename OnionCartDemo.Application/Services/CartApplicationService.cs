@@ -39,6 +39,6 @@ public class CartApplicationService
 
         cart.AddOrUpdateItem(product,request.Quantity);
 
-        await _cartRepository.Update(cart, cancellationToken);
+        await _cartRepository.UpdateAsync(cart, cancellationToken);
     }
 }

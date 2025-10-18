@@ -18,7 +18,7 @@ public class Cart
     public decimal TotalAmount => _items.Sum(i => i.TotalPrice);
 
 
-    public void AddOrUpdateItem(Product product, int quantity)
+    public void AddOrUpdateItem(Product product, int quantity) //changes the in-memory cart
     {
         ArgumentNullException.ThrowIfNull(product);
 
@@ -33,7 +33,7 @@ public class Cart
         _items.Add(item);
     }
 
-    public void RemoveItem(int cartItemId) 
+    public void RemoveItem(int cartItemId) //remove this item from your memory representation.
     {
         var item = _items.FirstOrDefault(i => i.Id == cartItemId);
 
