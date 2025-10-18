@@ -18,22 +18,24 @@ public class Cart
     public decimal TotalAmount => _items.Sum(i => i.TotalPrice);
 
 
-    internal void AddOrUpdateItem(CartItem item)
+    public void AddOrUpdateItem(Product product, int quantity)
     {
-        var exitingItem = _items.FirstOrDefault(i => i.ProductId == item.ProductId);
-        if (exitingItem is not null)
-        {
-            exitingItem.IncreaseQuantity(item.Quantity); // Update quantity
-        }
-        else
-        {
-            _items.Add(item);
-        }
+        ArgumentNullException.ThrowIfNull(product);
+
+        if (quantity <= 0) throw new ArgumentException("Quantity must be > 0", nameof(quantity));
+
+        var exitingItem = _items.FirstOrDefault(i => i.ProductId == product.Id);
+
+        exitingItem?.IncreaseQuantity(quantity); // Update quantity
+
+        var item = new CartItem(product.Id, product.UnitPrice, quantity);
+
+        _items.Add(item);
     }
 
-    internal void RemoveItem(int productId) 
+    public void RemoveItem(int cartItemId) 
     {
-        var item = _items.FirstOrDefault(i => i.ProductId == productId);
+        var item = _items.FirstOrDefault(i => i.Id == cartItemId);
 
         if (item is not null)
          _items.Remove(item);
