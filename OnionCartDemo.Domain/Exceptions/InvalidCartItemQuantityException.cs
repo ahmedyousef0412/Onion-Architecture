@@ -2,5 +2,5 @@
 
 public class InvalidCartItemQuantityException:DomainException
 {
-    public InvalidCartItemQuantityException() : base("Cart item quantity must be at least 1.") { }
+    public InvalidCartItemQuantityException(string message) : base(message) { }
 }

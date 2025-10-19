@@ -1,6 +1,22 @@
-@OnionCartDemo.WebApi_HostAddress = http://localhost:5122
+@OnionCartDemo.WebApi_HostAddress = https://localhost:7281
 
 GET {{OnionCartDemo.WebApi_HostAddress}}/weatherforecast/
 Accept: application/json
+
+###
+
+POST {{OnionCartDemo.WebApi_HostAddress}}/api/carts
+Content-Type: application/json
+
+{
+  "cartId": 2,
+  "productId": 20,
+  "quantity": 0
+}
+
+
+###
+@id = 1
+GET {{OnionCartDemo.WebApi_HostAddress}}/api/Carts/{{id}}
 
 ###
