@@ -1,4 +1,5 @@
-﻿using OnionCartDemo.Application.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using OnionCartDemo.Application.Interfaces;
 using OnionCartDemo.Domain.Entities;
 using OnionCartDemo.Infrastructure.EntityFramework;
 
@@ -17,6 +18,16 @@ internal class CartRepository : ICartRepository
     {
         return await _cartDbContext.Carts.FindAsync([cartId], cancellationToken);
     }
+
+    public async Task<Cart?> GetByIdWithItemsAsync(int cartId, CancellationToken cancellationToken = default)
+    {
+        return await _cartDbContext.Carts
+            .Include(c => c.Items)
+             .ThenInclude(ci => ci.Product)
+             .AsNoTracking()
+             .SingleOrDefaultAsync(c => c.Id == cartId,cancellationToken);
+    }
+
     public async Task AddAsync(Cart cart, CancellationToken cancellationToken = default)
     {
          await _cartDbContext.Carts.AddAsync(cart, cancellationToken);
@@ -31,4 +42,6 @@ internal class CartRepository : ICartRepository
     {
         _cartDbContext.Carts.Remove(cart);
     }
+
+   
 }

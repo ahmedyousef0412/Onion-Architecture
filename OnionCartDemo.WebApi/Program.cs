@@ -1,10 +1,25 @@
+using OnionCartDemo.Application.Handlers;
+using OnionCartDemo.Domain.Services;
+using OnionCartDemo.Infrastructure.DependencyInjection;
+using OnionCartDemo.WebApi.Middlewares;
+
 var builder = WebApplication.CreateBuilder(args);
+
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+                       ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+builder.Services.AddInfrastructureServices(connectionString);
+builder.Services.AddScoped<ICartDomainService, CartDomainService>();
+builder.Services.AddScoped<AddItemToCartCommandHandler>();
+builder.Services.AddScoped<GetCartByIdQueryHandler>();
 
 var app = builder.Build();
 
@@ -18,6 +33,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.MapControllers();
 
 app.Run();

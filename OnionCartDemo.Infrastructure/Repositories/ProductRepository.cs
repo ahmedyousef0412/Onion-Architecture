@@ -17,9 +17,21 @@ internal class ProductRepository : IProductRepository
 
     public async Task<IReadOnlyCollection<Product>> GetAllAsync(CancellationToken cancellationToken = default)
     {
+        #region Include InActive Products 
+        //var query = _cartDbContext.Products.AsNoTracking();
+
+        //if(onlyActive)
+        //    query = query.Where(p => p.IsActive);
+
+        //return await query.ToListAsync(cancellationToken);
+        #endregion
+
         return await _cartDbContext.Products
             .AsNoTracking()
-            .ToListAsync(cancellationToken);
+            .Where(p => p.IsActive)
+            .OrderBy(p => p.Name)
+            .ToListAsync(cancellationToken); //materialize into memory
+
     }
 
     public async Task<Product?> GetByIdAsync(int productId, CancellationToken cancellationToken = default)

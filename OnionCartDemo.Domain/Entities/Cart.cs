@@ -1,4 +1,6 @@
-﻿namespace OnionCartDemo.Domain.Entities;
+﻿using OnionCartDemo.Domain.Exceptions;
+
+namespace OnionCartDemo.Domain.Entities;
 
 public class Cart
 {
@@ -10,9 +12,9 @@ public class Cart
 
     private Cart() { } // For EF Core
 
-    public Cart(int id) //Used for referencing an existing cart (without reloading)
+    public static Cart CreateNew()
     {
-        Id = id;
+        return new Cart();
     }
 
     public decimal TotalAmount => _items.Sum(i => i.TotalPrice);
@@ -22,7 +24,7 @@ public class Cart
     {
         ArgumentNullException.ThrowIfNull(product);
 
-        if (quantity <= 0) throw new ArgumentException("Quantity must be > 0", nameof(quantity));
+        if (quantity <= 0) throw new InvalidCartItemQuantityException("Quantity must be greater than zero.");
 
         var exitingItem = _items.FirstOrDefault(i => i.ProductId == product.Id);
 
