@@ -24,24 +24,29 @@ internal class CartRepository : ICartRepository
         return await _cartDbContext.Carts
             .Include(c => c.Items)
              .ThenInclude(ci => ci.Product)
-             .AsNoTracking()
-             .SingleOrDefaultAsync(c => c.Id == cartId,cancellationToken);
+            .SingleOrDefaultAsync(c => c.Id == cartId,cancellationToken);
     }
 
+    public async Task<Cart?> GetByIdWithItemsAsNoTrackingAsync(int cartId, CancellationToken cancellationToken = default)
+    {
+        return await _cartDbContext.Carts
+            .Include(c => c.Items)
+             .ThenInclude(ci => ci.Product)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(c => c.Id == cartId, cancellationToken);
+    }
     public async Task AddAsync(Cart cart, CancellationToken cancellationToken = default)
     {
          await _cartDbContext.Carts.AddAsync(cart, cancellationToken);
     }
 
-    public async Task UpdateAsync(Cart cart, CancellationToken cancellationToken = default)
+    public void RemoveItem(CartItem item)
     {
-        _cartDbContext.Carts.Update(cart);
+        _cartDbContext.CartItems.Remove(item);
     }
 
-    public async Task DeleteAsync(Cart cart, CancellationToken cancellationToken = default)
+    public void Delete(Cart cart)
     {
         _cartDbContext.Carts.Remove(cart);
     }
-
-   
 }

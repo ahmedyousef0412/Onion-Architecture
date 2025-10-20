@@ -34,6 +34,7 @@ internal class CartConfiguration : IEntityTypeConfiguration<Cart>
         builder.HasMany(c => c.Items)
                .WithOne() 
                .HasForeignKey("CartId") 
+               .IsRequired()
                .OnDelete(DeleteBehavior.Cascade); // When a Cart is deleted, its items are also deleted
     }
 }

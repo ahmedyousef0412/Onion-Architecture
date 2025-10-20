@@ -16,7 +16,7 @@ public class CartItem
     {
 
         if (quantity < 1)
-            throw new InvalidCartItemQuantityException();
+            throw new InvalidCartItemQuantityException("Quantity must be greater than zero.");
 
         ProductId = productId;
         Quantity = quantity;
@@ -28,7 +28,7 @@ public class CartItem
     public void IncreaseQuantity(int amount)
     {
         if (amount < 1)
-            throw new InvalidCartItemQuantityException();
+            throw new InvalidCartItemQuantityException(message: "Amount must be greater than zero.");
 
         Quantity += amount;
     }
@@ -36,8 +36,11 @@ public class CartItem
     public void SetQuantity(int quantity)
     {
         if (quantity < 1)
-            throw new InvalidCartItemQuantityException();
+            throw new InvalidCartItemQuantityException("Quantity must be greater than zero.");
 
         Quantity = quantity;
     }
+
+    
+
 }

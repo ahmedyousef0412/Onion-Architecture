@@ -20,6 +20,9 @@ public class CartDomainService : ICartDomainService
 
         ArgumentNullException.ThrowIfNull(product);
 
+        //if(quantity > product.Stock)
+        //    throw new DomainException("Not enough stock.");
+
         //7000 =                    5000             + ( 1000 * 2 )
         var projectedTotal = cart.TotalAmount + (product.UnitPrice * quantity);
 
