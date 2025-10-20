@@ -5,18 +5,69 @@ Accept: application/json
 
 ###
 
-POST {{OnionCartDemo.WebApi_HostAddress}}/api/carts
-Content-Type: application/json
-
-{
-  "cartId": 2,
-  "productId": 20,
-  "quantity": 0
-}
 
 
 ###
-@id = 1
+@id=2
 GET {{OnionCartDemo.WebApi_HostAddress}}/api/Carts/{{id}}
+
+###
+
+
+POST {{OnionCartDemo.WebApi_HostAddress}}/api/cart
+Content-Type: application/json
+
+
+ {
+  "cartId": 3,
+  "productId": 11,
+  "quantity": 4
+}
+
+
+
+###
+
+@cartId=4
+DELETE {{OnionCartDemo.WebApi_HostAddress}}/api/cart/{{cartId}}/clear
+
+###
+
+GET {{OnionCartDemo.WebApi_HostAddress}}/api/Cart/{{id}}
+
+###
+
+POST {{OnionCartDemo.WebApi_HostAddress}}/api/cart
+Content-Type: application/json
+
+{
+  "cartId": 7,
+  "productId": 2,
+  "quantity": 2
+}
+
+###
+@cartId=12
+@cartItemId=11
+DELETE {{OnionCartDemo.WebApi_HostAddress}}/api/cart/{{cartId}}/Items/{{cartItemId}}
+
+###
+
+@cartId=8
+DELETE {{OnionCartDemo.WebApi_HostAddress}}/api/cart/{{cartId}}
+
+
+###
+@cartId=9
+DELETE {{OnionCartDemo.WebApi_HostAddress}}/api/cart/{{cartId}}
+
+###
+@cartId=10
+@cartItemId=16
+
+PUT {{OnionCartDemo.WebApi_HostAddress}}/api/cart/{{cartId}}/items/{{cartItemId}}/quantity
+Content-Type: application/json
+
+4
 
 ###

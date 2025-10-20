@@ -34,13 +34,21 @@ public class Cart
 
         _items.Add(item);
     }
-
-    public void RemoveItem(int cartItemId) //remove this item from your memory representation.
+    public CartItem? RemoveItem(int cartItemId)
     {
         var item = _items.FirstOrDefault(i => i.Id == cartItemId);
-
         if (item is not null)
-         _items.Remove(item);
-        
+            _items.Remove(item);
+
+        return item;
+    }
+    public void Clear() => _items.Clear();
+
+    public void UpdateItemQuantity(int cartItemId, int newQuantity)
+    {
+        var item = _items.FirstOrDefault(i => i.Id == cartItemId)
+            ?? throw new InvalidOperationException($"Item with ID {cartItemId} not found in cart.");
+
+        item.SetQuantity(newQuantity);
     }
 }
