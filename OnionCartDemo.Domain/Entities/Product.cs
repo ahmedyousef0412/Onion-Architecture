@@ -33,7 +33,11 @@ public class Product
 
     public void Deactivate()
     {
+        if (!IsActive)
+            throw new ProductAlreadyInactiveException();
+
         IsActive = false;
     }
+
 
 }

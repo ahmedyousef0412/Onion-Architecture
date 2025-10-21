@@ -1,3 +1,4 @@
+using OnionCartDemo.Application.Interfaces;
 using OnionCartDemo.Application.Services;
 using OnionCartDemo.Domain.Services;
 using OnionCartDemo.Infrastructure.DependencyInjection;
@@ -18,7 +19,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Services.AddInfrastructureServices(connectionString);
 builder.Services.AddScoped<ICartDomainService, CartDomainService>();
-builder.Services.AddScoped<CartApplicationService>();
+builder.Services.AddScoped<ICartApplicationService,CartApplicationService>();
+builder.Services.AddScoped<IProductApplicationService,ProductApplicationService>();
 
 
 var app = builder.Build();
