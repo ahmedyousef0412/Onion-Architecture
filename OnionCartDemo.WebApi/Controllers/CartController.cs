@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnionCartDemo.Application.DTOs;
-using OnionCartDemo.Application.Services;
-using System.Threading;
+using OnionCartDemo.Application.Interfaces;
 
 namespace OnionCartDemo.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class CartController(CartApplicationService cartApplicationService)
+public class CartController(ICartApplicationService cartApplicationService)
     : ControllerBase
 {
-    private readonly CartApplicationService _cartApplicationService = cartApplicationService;
+    private readonly ICartApplicationService _cartApplicationService = cartApplicationService;
 
 
     [HttpGet("{id:int}")]
@@ -51,6 +50,9 @@ public class CartController(CartApplicationService cartApplicationService)
         await _cartApplicationService.DeleteCartAsync(cartId, cancellationToken);
         return NoContent();
     }
+
+    //For demos / simple tests: send a raw number(4)
+   // For production: use a DTO(like UpdateCartItemQuantityDto) — it’s more extensible and self-documenting
 
     [HttpPut("{cartId}/items/{cartItemId}/quantity")]
     public async Task<IActionResult> UpdateItemQuantity(int cartId,int cartItemId, [FromBody] int newQuantity,CancellationToken cancellationToken)

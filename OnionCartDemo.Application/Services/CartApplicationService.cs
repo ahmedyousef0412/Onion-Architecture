@@ -10,7 +10,7 @@ namespace OnionCartDemo.Application.Services;
 public class CartApplicationService(ICartRepository cartRepository,
     IProductRepository productRepository,
     ICartDomainService cartDomainService,
-    IUnitOfWork unitOfWork)
+    IUnitOfWork unitOfWork) : ICartApplicationService
 {
     private readonly ICartRepository _cartRepository = cartRepository;
     private readonly IProductRepository _productRepository = productRepository;

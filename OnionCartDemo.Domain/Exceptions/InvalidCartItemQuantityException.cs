@@ -1,6 +1,6 @@
 ﻿namespace OnionCartDemo.Domain.Exceptions;
 
-public class InvalidCartItemQuantityException:DomainException
+public sealed  class InvalidCartItemQuantityException:DomainException
 {
-    public InvalidCartItemQuantityException(string message) : base(message) { }
+    public InvalidCartItemQuantityException() : base("Quantity must be greater than zero.") { }
 }

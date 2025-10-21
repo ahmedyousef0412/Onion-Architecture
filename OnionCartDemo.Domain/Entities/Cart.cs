@@ -24,7 +24,7 @@ public class Cart
     {
         ArgumentNullException.ThrowIfNull(product);
 
-        if (quantity <= 0) throw new InvalidCartItemQuantityException("Quantity must be greater than zero.");
+        if (quantity <= 0) throw new InvalidCartItemQuantityException();
 
         var exitingItem = _items.FirstOrDefault(i => i.ProductId == product.Id);
 

@@ -1,14 +1,6 @@
 @OnionCartDemo.WebApi_HostAddress = https://localhost:7281
 
-GET {{OnionCartDemo.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
 
-###
-
-
-
-###
-@id=2
 GET {{OnionCartDemo.WebApi_HostAddress}}/api/Carts/{{id}}
 
 ###
@@ -69,5 +61,57 @@ PUT {{OnionCartDemo.WebApi_HostAddress}}/api/cart/{{cartId}}/items/{{cartItemId}
 Content-Type: application/json
 
 4
+
+###
+
+GET {{OnionCartDemo.WebApi_HostAddress}}/api/product
+
+###
+
+
+GET {{OnionCartDemo.WebApi_HostAddress}}/api/product/{id:int}?id={{id}}
+
+###
+@id=16
+GET {{OnionCartDemo.WebApi_HostAddress}}/api/Product/{{id}}
+
+###
+@id=16
+PUT {{OnionCartDemo.WebApi_HostAddress}}/api/Product/{{id}}/deactivate
+
+###
+
+GET {{OnionCartDemo.WebApi_HostAddress}}/api/product
+
+
+###
+
+POST {{OnionCartDemo.WebApi_HostAddress}}/api/product
+Content-Type: application/json
+
+{
+   "name": "new Product 3", 
+  "unitPrice": 25.99
+}
+
+###
+
+POST {{OnionCartDemo.WebApi_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+   "name": "new Product 3", 
+  "unitPrice": 25.99
+}
+
+###
+
+POST {{OnionCartDemo.WebApi_HostAddress}}/api/products
+Content-Type: application/json
+
+{
+   "name": "new Product 4", 
+  "unitPrice": 25.99
+}
 
 ###
