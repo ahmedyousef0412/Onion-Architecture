@@ -1,19 +1,18 @@
-﻿using OnionCartDemo.Domain.Exceptions;
+﻿using Microsoft.AspNetCore.Http;
 using OnionCartDemo.Application.Exceptions;
-using System;
+using OnionCartDemo.Domain.Exceptions;
 using System.ComponentModel.DataAnnotations;
 
 namespace OnionCartDemo.WebApi.Middlewares;
 
-public  class ExceptionHandlingMiddleware
+public  class ExceptionHandlingMiddleware(RequestDelegate next ,
+    IHostEnvironment env,
+    ILogger<ExceptionHandlingMiddleware> logger)
 {
 
-    private readonly RequestDelegate _next;
-
-    public ExceptionHandlingMiddleware(RequestDelegate next)
-    {
-        _next = next;
-    }
+    private readonly RequestDelegate _next = next;
+    private readonly IHostEnvironment _env = env;
+    private readonly ILogger<ExceptionHandlingMiddleware> _logger = logger;
 
     public async Task InvokeAsync(HttpContext context)
     {
@@ -21,31 +20,69 @@ public  class ExceptionHandlingMiddleware
         {
             await _next(context);
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
-            await HandlingExceptionAsync(context, ex);
+            await HandlingExceptionAsync(context, exception);
         }
     }
 
-    private static async Task HandlingExceptionAsync(HttpContext context, Exception ex)
+    private  async Task HandlingExceptionAsync(HttpContext context, Exception exception)
     {
-        context.Response.ContentType = "application/json";
+        var (statusCode, title, message, source) = MapException(exception);
 
-        context.Response.StatusCode = ex switch
-        {
-            NotFoundException => StatusCodes.Status404NotFound,
-            DomainException => StatusCodes.Status400BadRequest,
-            ValidationException => StatusCodes.Status422UnprocessableEntity,
-            _ => StatusCodes.Status500InternalServerError
-        };
+        _logger.LogError(exception, "An error occurred: {Message}", exception.Message);
 
         var response = new
         {
-            status = context.Response.StatusCode,
-            error = ex.GetType().Name,
-            message = ex.Message,
+            status = statusCode,
+            title,
+            message,
+            source = _env.IsDevelopment() ? source : null
         };
 
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = statusCode;
+
         await context.Response.WriteAsJsonAsync(response);
+    }
+    private static (int StatusCode, string Title, string Message, string Source) MapException(Exception exception)
+    {
+        return exception switch
+        {
+            ValidationException => (
+                StatusCodes.Status400BadRequest,
+                "ValidationFailure",
+                "One or more validation errors occurred.",
+                "Application"
+            ),
+
+            NotFoundException notFoundException => (
+                StatusCodes.Status404NotFound,
+                "NotFound",
+                notFoundException.Message,
+                "Application"
+            ),
+
+            DomainException domainException => (
+                StatusCodes.Status400BadRequest,
+                "DomainError",
+                domainException.Message,
+                "Domain"
+            ),
+
+            ApplicationException applicationException => (
+                StatusCodes.Status400BadRequest,
+                "ApplicationError",
+                applicationException.Message,
+                "Application"
+            ),
+
+            _ => (
+                StatusCodes.Status500InternalServerError,
+                "InternalServerError",
+                "An unexpected error has occurred.",
+                "Infrastructure"
+            )
+        };
     }
 }

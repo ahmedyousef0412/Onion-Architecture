@@ -1,6 +1,6 @@
 ﻿
 namespace OnionCartDemo.Domain.Exceptions;
 
-public abstract class DomainException(string message) : Exception(message)
+public  class DomainException(string message) : Exception(message)
 {
 }

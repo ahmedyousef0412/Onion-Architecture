@@ -1,3 +1,4 @@
+using OnionCartDemo.Application.DI;
 using OnionCartDemo.Application.Interfaces;
 using OnionCartDemo.Application.Services;
 using OnionCartDemo.Domain.Services;
@@ -14,17 +15,17 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-                       ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
-builder.Services.AddInfrastructureServices(connectionString);
+
+builder.Services.AddInfrastructureServices(builder.Configuration);
+builder.Services.AddApplicationServices();
 builder.Services.AddScoped<ICartDomainService, CartDomainService>();
-builder.Services.AddScoped<ICartApplicationService,CartApplicationService>();
-builder.Services.AddScoped<IProductApplicationService,ProductApplicationService>();
+
 
 
 var app = builder.Build();
 
+app.UseMiddleware<RequestLoggingMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -36,6 +37,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+
 app.MapControllers();
 
 app.Run();

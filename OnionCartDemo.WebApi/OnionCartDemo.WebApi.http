@@ -115,3 +115,11 @@ Content-Type: application/json
 }
 
 ###
+
+GET {{OnionCartDemo.WebApi_HostAddress}}/api/products
+
+###
+
+POST {{OnionCartDemo.WebApi_HostAddress}}/api/products/{{id}}/image
+
+###
