@@ -9,5 +9,5 @@ public interface IProductApplicationService
     Task<IReadOnlyCollection<ProductDto>> GetAllAsync(CancellationToken cancellationToken = default);
     Task<ProductDto> AddAsync(CreateProductDto dto, CancellationToken cancellationToken = default);
     Task DeactivateAsync(int productId, CancellationToken cancellationToken);
-
+    Task<ProductDto> UploadProductImageAsync(int productId,FileUploadDto file, CancellationToken cancellationToken = default);
 }

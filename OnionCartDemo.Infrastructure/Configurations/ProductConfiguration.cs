@@ -19,5 +19,10 @@ internal class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.UnitPrice)
                 .IsRequired()
                 .HasColumnType("decimal(18,2)");
+
+        builder.Property(p => p.ImageUrl)
+            .IsRequired()
+            .HasMaxLength(200)
+        .HasColumnName("ImageUrl");
     }
 }

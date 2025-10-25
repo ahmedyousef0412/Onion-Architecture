@@ -18,10 +18,10 @@ public class ProductsController(IProductApplicationService productService) : Con
     }
 
 
-    [HttpGet("{id:int}" , Name = "GetProductById")]
+    [HttpGet("{id:int}", Name = "GetProductById")]
     [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<ProductDto>> GetByIdAsync([FromRoute]int id, CancellationToken cancellationToken)
+    public async Task<ActionResult<ProductDto>> GetByIdAsync([FromRoute] int id, CancellationToken cancellationToken)
     {
         var product = await _productService.GetByIdAsync(id, cancellationToken);
         return Ok(product);
@@ -36,10 +36,10 @@ public class ProductsController(IProductApplicationService productService) : Con
         var product = await _productService.AddAsync(dto, cancellationToken);
 
         return CreatedAtRoute("GetProductById", new { id = product.Id }, product);
-       
+
     }
 
-    
+
     [HttpPut("{id:int}/deactivate")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -49,4 +49,28 @@ public class ProductsController(IProductApplicationService productService) : Con
         return NoContent();
     }
 
+
+
+    [HttpPost("{id:int}/image")]
+    [ProducesResponseType(typeof(ProductDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UploadImageAsync(int id, [FromForm] IFormFile file, CancellationToken cancellationToken)
+    {
+
+        if (file == null)
+            return BadRequest("No file uploaded.");
+
+        await using var stream = file.OpenReadStream();
+
+        var fileDto = new FileUploadDto
+        {
+            FileName = file.FileName,
+            Content = stream
+        };
+
+        var result = await _productService.UploadProductImageAsync(id, fileDto, cancellationToken);
+
+        return Ok(result);
+    }
 }
